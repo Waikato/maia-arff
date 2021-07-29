@@ -1,0 +1,22 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
+}
+
+group 'maia'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api "maia:maia-dataset"
+    implementation "maia:maia-primitive"
+    implementation "maia:maia-configure"
+    implementation "maia:maia-standard-types"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+}
+
+sourceSets {
+    main.kotlin.srcDirs += 'src'
+}
