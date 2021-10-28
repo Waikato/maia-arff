@@ -13,7 +13,6 @@ import māia.ml.dataset.type.DataType
 import māia.ml.dataset.type.standard.Nominal
 import māia.ml.dataset.type.standard.Numeric
 import māia.util.buildSet
-import māia.util.inlineRangeForLoop
 import māia.util.itemIterator
 import māia.util.process
 import māia.util.zip
@@ -150,7 +149,7 @@ fun splitValues(
     val lineLength = line.length
     val values = ArrayList<String>()
     try {
-        inlineRangeForLoop(numAttributes) {
+        repeat(numAttributes) {
             // Skip any leading whitespace
             while (line[j] == ' ') j++
 
