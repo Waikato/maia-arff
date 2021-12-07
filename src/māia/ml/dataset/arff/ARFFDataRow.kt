@@ -26,6 +26,6 @@ class ARFFDataRow internal constructor(
         representation : DataRepresentation<*, *, out T>
     ) : T = headersInternal.ensureOwnership(representation) {
         @Suppress("UNCHECKED_CAST")
-        return valueMap[representation] as T ?: throw MissingValue()
+        return valueMap[this] as T ?: throw MissingValue()
     }
 }
