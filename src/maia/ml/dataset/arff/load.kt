@@ -111,15 +111,17 @@ fun parseDataLine(
                 else
                     value.toDouble().also { representation.validate(it) }
             }
-            is Nominal<*, *, *, *> -> {
+            is Nominal<*, *, *, *, *> -> {
                 if (value == MISSING_VALUE_SYMBOL) {
                     valuesMap[type.canonicalRepresentation] = null
+                    valuesMap[type.labelRepresentation] = null
                     valuesMap[type.indexRepresentation] = null
                     valuesMap[type.entropicRepresentation] = null
                 } else {
-                    type.canonicalRepresentation.validate(value)
+                    type.labelRepresentation.validate(value)
                     val index = type.indexOf(value)
-                    valuesMap[type.canonicalRepresentation] = value
+                    valuesMap[type.canonicalRepresentation] = type.oneHot(index)
+                    valuesMap[type.labelRepresentation] = value
                     valuesMap[type.indexRepresentation] = index
                     valuesMap[type.entropicRepresentation] = index.toBigInteger()
                 }

@@ -38,7 +38,7 @@ internal class LoadTest {
         testHeader<Numeric<*, *>>(1, "sepalwidth", headers[1])
         testHeader<Numeric<*, *>>(2, "petallength", headers[2])
         testHeader<Numeric<*, *>>(3, "petalwidth", headers[3])
-        testHeader<Nominal<*, *, *, *>>(4, "class", headers[4])
+        testHeader<Nominal<*, *, *, *, *>>(4, "class", headers[4])
     }
 
     inline fun <reified T: DataType<*, *>> testHeader(
