@@ -102,26 +102,25 @@ fun parseDataLine(
     // TODO: Choose a more efficient data-structure
     val valuesMap = HashMap<DataRepresentation<*, *, *>, Any?>()
     zip(headers, values).forEach { (header, value) ->
-        val type = header.type
-        when (type) {
-            is Numeric<*, *> -> {
+        when (val type = header.type) {
+            is Numeric -> {
                 val representation = type.canonicalRepresentation
                 valuesMap[representation] = if (value == MISSING_VALUE_SYMBOL)
                     null
                 else
                     value.toDouble().also { representation.validate(it) }
             }
-            is Nominal<*, *, *, *, *> -> {
+            is Nominal -> {
                 if (value == MISSING_VALUE_SYMBOL) {
                     valuesMap[type.canonicalRepresentation] = null
-                    valuesMap[type.labelRepresentation] = null
+                    valuesMap[type.probabilitiesRepresentation] = null
                     valuesMap[type.indexRepresentation] = null
                     valuesMap[type.entropicRepresentation] = null
                 } else {
-                    type.labelRepresentation.validate(value)
+                    type.canonicalRepresentation.validate(value)
                     val index = type.indexOf(value)
-                    valuesMap[type.canonicalRepresentation] = type.oneHot(index)
-                    valuesMap[type.labelRepresentation] = value
+                    valuesMap[type.canonicalRepresentation] = value
+                    valuesMap[type.probabilitiesRepresentation] = type.oneHot(index)
                     valuesMap[type.indexRepresentation] = index
                     valuesMap[type.entropicRepresentation] = index.toBigInteger()
                 }
@@ -356,13 +355,13 @@ fun parseAttributeType(
         // Need to parse nominal classes from the non-lower-cased version
         val nominalClasses = parseNominalClasses(attributeType)
 
-        Nominal.PlaceHolder(true, *nominalClasses.toTypedArray())
+        Nominal(true, *nominalClasses.toTypedArray())
     } else if (
         attributeTypeLowerCase == REAL_ATTRIBUTE_KEYWORD
         || attributeTypeLowerCase == INTEGER_ATTRIBUTE_KEYWORD
         || attributeTypeLowerCase == NUMERIC_ATTRIBUTE_KEYWORD
     ) {
-        Numeric.PlaceHolder(true)
+        Numeric(true)
     } else {
         throw UnsupportedAttributeTypeException(attributeType)
     }
